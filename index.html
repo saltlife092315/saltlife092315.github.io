@@ -8,53 +8,67 @@
 <style>
   :root {
     --ink: #ffffff;
-    --row-bg: rgba(255, 255, 255, 0.12);
-    --row-bg-hover: rgba(255, 255, 255, 0.22);
+    --row-bg: rgba(255, 255, 255, 0.14);
+    --row-bg-hover: rgba(255, 255, 255, 0.24);
     --row-border: rgba(255, 255, 255, 0.25);
     --coral: #e5745a;
   }
 
   * { box-sizing: border-box; }
 
+  html, body {
+    height: 100%;
+  }
+
   body {
     margin: 0;
     min-height: 100vh;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
-    background: #0d0d0d url('background.jpg') center/cover fixed no-repeat;
+    background: #2b2b2b;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
     color: var(--ink);
-    padding: 48px 20px;
+    padding: 40px 16px;
   }
 
-  .overlay {
-    position: fixed;
+  .phone {
+    position: relative;
+    width: 100%;
+    max-width: 380px;
+    min-height: 640px;
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    background: #111 url('background.jpg') center/cover no-repeat;
+  }
+
+  .phone::before {
+    content: "";
+    position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.45);
-    z-index: 0;
+    background: rgba(0, 0, 0, 0.35);
   }
 
   .card {
     position: relative;
     z-index: 1;
-    width: 100%;
-    max-width: 420px;
+    padding: 36px 22px 28px;
     text-align: center;
   }
 
   h1 {
-    font-size: 1.3rem;
-    letter-spacing: 0.03em;
-    margin-bottom: 0.75rem;
+    font-size: 1.15rem;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.6rem;
     text-shadow: 0 2px 8px rgba(0,0,0,0.6);
   }
 
   p.sub {
     margin-top: 0;
-    margin-bottom: 2rem;
-    color: rgba(255,255,255,0.85);
-    font-size: 0.9rem;
+    margin-bottom: 1.75rem;
+    color: rgba(255,255,255,0.9);
+    font-size: 0.82rem;
     line-height: 1.4;
     text-shadow: 0 1px 6px rgba(0,0,0,0.6);
   }
@@ -62,23 +76,23 @@
   .links {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
   }
 
   a.btn {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 10px 16px;
+    gap: 12px;
+    padding: 10px 14px;
     background: var(--row-bg);
     color: white;
     text-decoration: none;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     border-radius: 12px;
     border: 1px solid var(--row-border);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     transition: background 0.15s ease, transform 0.15s ease;
   }
 
@@ -93,8 +107,8 @@
   }
 
   a.btn img {
-    width: 34px;
-    height: 34px;
+    width: 30px;
+    height: 30px;
     object-fit: contain;
     border-radius: 50%;
     background: white;
@@ -102,8 +116,8 @@
   }
 
   footer {
-    margin-top: 2rem;
-    font-size: 0.7rem;
+    margin-top: 1.5rem;
+    font-size: 0.65rem;
     opacity: 0.6;
     text-shadow: 0 1px 6px rgba(0,0,0,0.6);
   }
@@ -117,57 +131,59 @@
   .verify-wrap {
     display: flex;
     justify-content: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
     min-height: 65px;
     align-items: center;
   }
 
   .verify-note {
-    font-size: 0.8rem;
-    color: rgba(255,255,255,0.85);
-    opacity: 0.85;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.9);
+    opacity: 0.9;
     text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+    margin-bottom: 1rem;
   }
 </style>
 </head>
 <body>
-  <div class="overlay"></div>
-  <div class="card">
-    <h1>saltlife092315</h1>
-    <p class="sub">Add a short bio or description here</p>
+  <div class="phone">
+    <div class="card">
+      <h1>saltlife092315</h1>
+      <p class="sub">Add a short bio or description here</p>
 
-    <div class="verify-wrap">
-      <div class="cf-turnstile"
-           data-sitekey="0x4AAAAAADxikIq4IP1PB3MD"
-           data-callback="onVerified"
-           data-theme="light"></div>
+      <div class="verify-wrap">
+        <div class="cf-turnstile"
+             data-sitekey="0x4AAAAAADxikIq4IP1PB3MD"
+             data-callback="onVerified"
+             data-theme="light"></div>
+      </div>
+      <p class="verify-note" id="verifyNote">Please complete the check above to unlock the links.</p>
+
+      <div class="links locked" id="linksBox">
+        <a class="btn" href="#" target="_blank" rel="noopener">
+          <img src="onlyfans.png" alt="">
+          <span>OnlyFans</span>
+        </a>
+        <a class="btn" href="#" target="_blank" rel="noopener">
+          <img src="fansly.png" alt="">
+          <span>Fansly</span>
+        </a>
+        <a class="btn" href="#" target="_blank" rel="noopener">
+          <img src="pantydeal.webp" alt="">
+          <span>Pantydeal</span>
+        </a>
+        <a class="btn" href="#" target="_blank" rel="noopener">
+          <img src="sofiagray.jpg" alt="">
+          <span>SofiaGray</span>
+        </a>
+        <a class="btn" href="#" target="_blank" rel="noopener">
+          <img src="snifffr.jpg" alt="">
+          <span>Snifffr</span>
+        </a>
+      </div>
+
+      <footer>edit index.html to add your real links</footer>
     </div>
-    <p class="verify-note" id="verifyNote">Please complete the check above to unlock the links.</p>
-
-    <div class="links locked" id="linksBox">
-      <a class="btn" href="#" target="_blank" rel="noopener">
-        <img src="onlyfans.png" alt="">
-        <span>OnlyFans</span>
-      </a>
-      <a class="btn" href="#" target="_blank" rel="noopener">
-        <img src="fansly.png" alt="">
-        <span>Fansly</span>
-      </a>
-      <a class="btn" href="#" target="_blank" rel="noopener">
-        <img src="pantydeal.webp" alt="">
-        <span>Pantydeal</span>
-      </a>
-      <a class="btn" href="#" target="_blank" rel="noopener">
-        <img src="sofiagray.jpg" alt="">
-        <span>SofiaGray</span>
-      </a>
-      <a class="btn" href="#" target="_blank" rel="noopener">
-        <img src="snifffr.jpg" alt="">
-        <span>Snifffr</span>
-      </a>
-    </div>
-
-    <footer>edit index.html to add your real links</footer>
   </div>
 
   <script>
