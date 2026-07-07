@@ -3,8 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <title>Links</title>
+<meta property="og:title" content="Links">
+<meta property="og:description" content="A collection of links.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Links">
+<meta name="twitter:description" content="A collection of links.">
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <style>
   :root {
@@ -129,14 +134,6 @@
     cursor: not-allowed;
   }
 
-  .verify-wrap {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1.25rem;
-    min-height: 65px;
-    align-items: center;
-  }
-
   .verify-note {
     font-size: 0.75rem;
     color: rgba(255,255,255,0.9);
@@ -145,11 +142,11 @@
     margin-bottom: 1rem;
   }
 
-  /* Age gate overlay */
-  .age-gate {
+  /* Bot-check gate (shown first) */
+  .gate {
     position: absolute;
     inset: 0;
-    z-index: 10;
+    z-index: 20;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -158,23 +155,23 @@
     text-align: center;
   }
 
-  .age-gate.hidden {
+  .gate.hidden {
     display: none;
   }
 
-  .age-gate h2 {
+  .gate h2 {
     font-size: 1.1rem;
     margin-bottom: 0.75rem;
   }
 
-  .age-gate p {
+  .gate p {
     font-size: 0.85rem;
     color: rgba(255,255,255,0.85);
     line-height: 1.5;
-    margin-bottom: 1.75rem;
+    margin-bottom: 1.5rem;
   }
 
-  .age-gate-buttons {
+  .gate-buttons {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -213,35 +210,50 @@
   .card.hidden-behind {
     visibility: hidden;
   }
+
+  .verify-only-wrap {
+    display: flex;
+    justify-content: center;
+    min-height: 65px;
+    align-items: center;
+  }
 </style>
 </head>
 <body>
   <div class="phone">
 
-    <div class="age-gate" id="ageGate">
+    <!-- Step 1: bot check, shown first, no mention of content type -->
+    <div class="gate" id="botGate">
+      <div>
+        <h2>Checking your connection…</h2>
+        <p>Please wait while we verify you're not a bot.</p>
+        <div class="verify-only-wrap">
+          <div class="cf-turnstile"
+               data-sitekey="0x4AAAAAADxikIq4IP1PB3MD"
+               data-callback="onBotVerified"
+               data-theme="light"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: age gate, only shown after bot check passes -->
+    <div class="gate hidden" id="ageGate">
       <div>
         <h2>18+ Content Notice</h2>
         <p>This page links to adult content platforms. You must be 18 years or older (or the age of majority in your location) to continue.</p>
-        <div class="age-gate-buttons">
+        <div class="gate-buttons">
           <button class="age-btn yes" id="ageYes">I am 18+ — Enter</button>
           <a class="age-btn no" href="https://www.google.com">Exit</a>
         </div>
       </div>
     </div>
 
+    <!-- Step 3: the actual links, hidden until both gates pass -->
     <div class="card hidden-behind" id="mainCard">
       <h1>saltlife092315</h1>
       <p class="sub">Add a short bio or description here</p>
 
-      <div class="verify-wrap">
-        <div class="cf-turnstile"
-             data-sitekey="0x4AAAAAADxikIq4IP1PB3MD"
-             data-callback="onVerified"
-             data-theme="light"></div>
-      </div>
-      <p class="verify-note" id="verifyNote">Please complete the check above to unlock the links.</p>
-
-      <div class="links locked" id="linksBox">
+      <div class="links" id="linksBox">
         <a class="btn" href="#" target="_blank" rel="noopener noreferrer">
           <img src="onlyfans.png" alt="">
           <span>OnlyFans</span>
@@ -269,9 +281,9 @@
   </div>
 
   <script>
-    function onVerified(token) {
-      document.getElementById('linksBox').classList.remove('locked');
-      document.getElementById('verifyNote').style.display = 'none';
+    function onBotVerified(token) {
+      document.getElementById('botGate').classList.add('hidden');
+      document.getElementById('ageGate').classList.remove('hidden');
     }
 
     document.getElementById('ageYes').addEventListener('click', function () {
