@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
 <title>Links</title>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <style>
@@ -143,11 +144,92 @@
     text-shadow: 0 1px 6px rgba(0,0,0,0.6);
     margin-bottom: 1rem;
   }
+
+  /* Age gate overlay */
+  .age-gate {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10, 10, 10, 0.92);
+    padding: 28px;
+    text-align: center;
+  }
+
+  .age-gate.hidden {
+    display: none;
+  }
+
+  .age-gate h2 {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .age-gate p {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.5;
+    margin-bottom: 1.75rem;
+  }
+
+  .age-gate-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .age-btn {
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+  }
+
+  .age-btn.yes {
+    background: var(--coral);
+    color: white;
+  }
+
+  .age-btn.yes:hover {
+    background: #d6603f;
+  }
+
+  .age-btn.no {
+    background: transparent;
+    color: rgba(255,255,255,0.7);
+    border: 1px solid rgba(255,255,255,0.3);
+  }
+
+  .age-btn.no:hover {
+    background: rgba(255,255,255,0.08);
+  }
+
+  .card.hidden-behind {
+    visibility: hidden;
+  }
 </style>
 </head>
 <body>
   <div class="phone">
-    <div class="card">
+
+    <div class="age-gate" id="ageGate">
+      <div>
+        <h2>18+ Content Notice</h2>
+        <p>This page links to adult content platforms. You must be 18 years or older (or the age of majority in your location) to continue.</p>
+        <div class="age-gate-buttons">
+          <button class="age-btn yes" id="ageYes">I am 18+ — Enter</button>
+          <a class="age-btn no" href="https://www.google.com">Exit</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card hidden-behind" id="mainCard">
       <h1>saltlife092315</h1>
       <p class="sub">Add a short bio or description here</p>
 
@@ -160,23 +242,23 @@
       <p class="verify-note" id="verifyNote">Please complete the check above to unlock the links.</p>
 
       <div class="links locked" id="linksBox">
-        <a class="btn" href="#" target="_blank" rel="noopener">
+        <a class="btn" href="#" target="_blank" rel="noopener noreferrer">
           <img src="onlyfans.png" alt="">
           <span>OnlyFans</span>
         </a>
-        <a class="btn" href="#" target="_blank" rel="noopener">
+        <a class="btn" href="#" target="_blank" rel="noopener noreferrer">
           <img src="fansly.png" alt="">
           <span>Fansly</span>
         </a>
-        <a class="btn" href="#" target="_blank" rel="noopener">
+        <a class="btn" href="#" target="_blank" rel="noopener noreferrer">
           <img src="pantydeal.webp" alt="">
           <span>Pantydeal</span>
         </a>
-        <a class="btn" href="#" target="_blank" rel="noopener">
+        <a class="btn" href="#" target="_blank" rel="noopener noreferrer">
           <img src="sofiagray.jpg" alt="">
           <span>SofiaGray</span>
         </a>
-        <a class="btn" href="#" target="_blank" rel="noopener">
+        <a class="btn" href="#" target="_blank" rel="noopener noreferrer">
           <img src="snifffr.jpg" alt="">
           <span>Snifffr</span>
         </a>
@@ -191,6 +273,11 @@
       document.getElementById('linksBox').classList.remove('locked');
       document.getElementById('verifyNote').style.display = 'none';
     }
+
+    document.getElementById('ageYes').addEventListener('click', function () {
+      document.getElementById('ageGate').classList.add('hidden');
+      document.getElementById('mainCard').classList.remove('hidden-behind');
+    });
   </script>
 </body>
 </html>
