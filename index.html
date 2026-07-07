@@ -217,9 +217,41 @@
     min-height: 65px;
     align-items: center;
   }
+
+  /* In-app browser warning banner */
+  .browser-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: #1a1a1a;
+    color: white;
+    padding: 14px 18px;
+    font-size: 0.82rem;
+    line-height: 1.45;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+    display: none;
+  }
+
+  .browser-banner.show {
+    display: block;
+  }
+
+  .browser-banner strong {
+    color: var(--coral);
+  }
+
+  .browser-banner .dots {
+    display: inline-block;
+    padding: 0 4px;
+    font-weight: 700;
+  }
 </style>
 </head>
 <body>
+  <div class="browser-banner" id="browserBanner"></div>
   <div class="phone">
 
     <!-- Step 1: bot check, shown first, no mention of content type -->
@@ -281,6 +313,44 @@
   </div>
 
   <script>
+    (function () {
+      var ua = navigator.userAgent || '';
+      var isAndroid = /Android/i.test(ua);
+      var isIOS = /iPhone|iPad|iPod/i.test(ua);
+
+      // Common in-app browser signatures
+      var inAppPatterns = [
+        /Instagram/i,
+        /FBAN|FBAV/i,        // Facebook / Messenger
+        /FB_IAB/i,
+        /Line\//i,
+        /MicroMessenger/i,   // WeChat
+        /TikTok/i,
+        /BytedanceWebview/i,
+        /Twitter/i,
+        /Snapchat/i,
+        /Pinterest/i
+      ];
+      var isInApp = inAppPatterns.some(function (re) { return re.test(ua); });
+
+      if (isInApp && isAndroid) {
+        // Attempt to force-open in Chrome automatically
+        var target = window.location.href.replace(/^https?:\/\//, '');
+        var intentUrl = 'intent://' + target + '#Intent;scheme=https;package=com.android.chrome;end';
+        window.location.href = intentUrl;
+      }
+
+      if (isInApp && isIOS) {
+        var banner = document.getElementById('browserBanner');
+        banner.innerHTML = 'For the best experience, tap <strong>&#8226;&#8226;&#8226;</strong> or <strong>Share</strong> above, then choose <strong>&ldquo;Open in Browser&rdquo;</strong> or <strong>&ldquo;Open in Safari&rdquo;</strong>.';
+        banner.classList.add('show');
+      } else if (isInApp && isAndroid) {
+        var banner = document.getElementById('browserBanner');
+        banner.innerHTML = 'Opening in your browser for the best experience&hellip; if nothing happens, tap the menu icon above and choose <strong>&ldquo;Open in Browser&rdquo;</strong>.';
+        banner.classList.add('show');
+      }
+    })();
+
     function onBotVerified(token) {
       document.getElementById('botGate').classList.add('hidden');
       document.getElementById('ageGate').classList.remove('hidden');
