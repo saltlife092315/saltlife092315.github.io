@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Links</title>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <style>
   :root {
     --ink: #0b2e3d;
@@ -91,6 +92,26 @@
     font-size: 0.75rem;
     opacity: 0.5;
   }
+
+  .links.locked a.btn {
+    pointer-events: none;
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .verify-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    min-height: 65px;
+    align-items: center;
+  }
+
+  .verify-note {
+    font-size: 0.8rem;
+    color: var(--sea-deep);
+    opacity: 0.7;
+  }
 </style>
 </head>
 <body>
@@ -98,7 +119,15 @@
     <h1>saltlife092315</h1>
     <p class="sub">placeholder landing page — replace these links</p>
 
-    <div class="links">
+    <div class="verify-wrap">
+      <div class="cf-turnstile"
+           data-sitekey="0x4AAAAAAADxikIq4IP1PB3MD"
+           data-callback="onVerified"
+           data-theme="light"></div>
+    </div>
+    <p class="verify-note" id="verifyNote">Please complete the check above to unlock the links.</p>
+
+    <div class="links locked" id="linksBox">
       <a class="btn" href="#" target="_blank" rel="noopener">Link 1</a>
       <a class="btn" href="#" target="_blank" rel="noopener">Link 2</a>
       <a class="btn" href="#" target="_blank" rel="noopener">Link 3</a>
@@ -107,5 +136,12 @@
 
     <footer>edit index.html to add your real links</footer>
   </div>
+
+  <script>
+    function onVerified(token) {
+      document.getElementById('linksBox').classList.remove('locked');
+      document.getElementById('verifyNote').style.display = 'none';
+    }
+  </script>
 </body>
 </html>
