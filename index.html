@@ -219,6 +219,18 @@
     align-items: center;
   }
 
+  .fallback-note {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.5;
+    margin-top: 0.75rem;
+    display: none;
+  }
+
+  .fallback-note.show {
+    display: block;
+  }
+
   /* In-app browser warning banner */
   .browser-banner {
     position: fixed;
@@ -266,6 +278,9 @@
                data-callback="onBotVerified"
                data-theme="light"></div>
         </div>
+        <p class="fallback-note" id="fallbackNote">
+          Taking longer than expected? Try refreshing the page, or disabling any ad blocker or privacy extension, then reload.
+        </p>
       </div>
     </div>
 
@@ -354,9 +369,15 @@
     })();
 
     function onBotVerified(token) {
+      clearTimeout(fallbackTimer);
       document.getElementById('botGate').classList.add('hidden');
       document.getElementById('ageGate').classList.remove('hidden');
     }
+
+    var fallbackTimer = setTimeout(function () {
+      var note = document.getElementById('fallbackNote');
+      if (note) { note.classList.add('show'); }
+    }, 8000);
 
     document.getElementById('ageYes').addEventListener('click', function () {
       document.getElementById('ageGate').classList.add('hidden');
