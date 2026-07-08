@@ -397,9 +397,10 @@
         /MicroMessenger/i,   // WeChat
         /TikTok/i,
         /BytedanceWebview/i,
-        /Twitter/i,
+        /Twitter/i,          // also matches the X app's in-app browser
         /Snapchat/i,
-        /Pinterest/i
+        /Pinterest/i,
+        /Reddit/i
       ];
       var isInApp = inAppPatterns.some(function (re) { return re.test(ua); });
 
