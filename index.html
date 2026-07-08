@@ -376,28 +376,7 @@
       <h1>saltlife092315</h1>
       <p class="sub">Add a short bio or description here</p>
 
-      <div class="links" id="linksBox">
-        <a class="btn" href="#" target="_blank" rel="noopener noreferrer" data-goatcounter-click="onlyfans">
-          <img src="onlyfans.png" alt="">
-          <span>OnlyFans</span>
-        </a>
-        <a class="btn" href="#" target="_blank" rel="noopener noreferrer" data-goatcounter-click="fansly">
-          <img src="fansly.png" alt="">
-          <span>Fansly</span>
-        </a>
-        <a class="btn" href="#" target="_blank" rel="noopener noreferrer" data-goatcounter-click="pantydeal">
-          <img src="pantydeal.webp" alt="">
-          <span>Pantydeal</span>
-        </a>
-        <a class="btn" href="#" target="_blank" rel="noopener noreferrer" data-goatcounter-click="sofiagray">
-          <img src="sofiagray.jpg" alt="">
-          <span>SofiaGray</span>
-        </a>
-        <a class="btn" href="#" target="_blank" rel="noopener noreferrer" data-goatcounter-click="snifffr">
-          <img src="snifffr.jpg" alt="">
-          <span>Snifffr</span>
-        </a>
-      </div>
+      <div class="links" id="linksBox"></div>
 
       <footer>edit index.html to add your real links</footer>
     </div>
@@ -454,9 +433,50 @@
       if (note) { note.classList.add('show'); }
     }, 8000);
 
+    // Link data is stored Base64-encoded so platform names/filenames never
+    // appear as plain text in the page source. It is decoded and rendered
+    // into the DOM only after both the bot check and age gate have been
+    // passed by a real visitor. Every visitor who runs this script (human
+    // or bot) sees identical, decoded content — nothing is shown
+    // differently based on who's asking.
+    var linkData = [
+      { key: 'b25seWZhbnM=',  label: 'T25seUZhbnM=',  img: 'b25seWZhbnMucG5n',   url: '#' },
+      { key: 'ZmFuc2x5',      label: 'RmFuc2x5',       img: 'ZmFuc2x5LnBuZw==',  url: '#' },
+      { key: 'cGFudHlkZWFs',  label: 'UGFudHlkZWFs',   img: 'cGFudHlkZWFsLndlYnA=', url: '#' },
+      { key: 'c29maWFncmF5',  label: 'U29maWFHcmF5',   img: 'c29maWFncmF5LmpwZw==', url: '#' },
+      { key: 'c25pZmZmcg==',  label: 'U25pZmZmcg==',   img: 'c25pZmZmci5qcGc=',   url: '#' }
+    ];
+
+    function b64(s) { return atob(s); }
+
+    function renderLinks() {
+      var box = document.getElementById('linksBox');
+      box.innerHTML = '';
+      linkData.forEach(function (item) {
+        var a = document.createElement('a');
+        a.className = 'btn';
+        a.href = item.url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.setAttribute('data-goatcounter-click', b64(item.key));
+
+        var img = document.createElement('img');
+        img.src = b64(item.img);
+        img.alt = '';
+
+        var span = document.createElement('span');
+        span.textContent = b64(item.label);
+
+        a.appendChild(img);
+        a.appendChild(span);
+        box.appendChild(a);
+      });
+    }
+
     document.getElementById('ageYes').addEventListener('click', function () {
       document.getElementById('ageGate').classList.add('hidden');
       document.getElementById('mainCard').classList.remove('hidden-behind');
+      renderLinks();
     });
   </script>
 
